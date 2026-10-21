@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S3 Viewer</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <button id="menuBtn" class="icon-btn" title="버킷 목록" aria-label="버킷 목록">☰</button>
+  <h1>S3 Viewer</h1>
+  <span id="endpoint" class="muted"></span>
+  <span class="badge">읽기 전용</span>
+</header>
+
+<div class="layout">
+  <aside id="sidebar">
+    <div class="side-head">
+      <span>버킷</span>
+      <button id="reloadBuckets" class="icon-btn" title="새로고침" aria-label="버킷 새로고침">↻</button>
+    </div>
+    <input id="bucketFilter" type="search" placeholder="버킷 필터">
+    <ul id="bucketList"></ul>
+  </aside>
+
+  <main>
+    <div class="toolbar">
+      <nav id="breadcrumb" aria-label="경로"></nav>
+      <div class="tools">
+        <input id="filter" type="search" placeholder="필터 (Enter: 서버에서 접두사 검색)">
+        <button id="refresh" title="새로고침">새로고침</button>
+      </div>
+    </div>
+    <div id="message" class="message" hidden></div>
+    <div class="table-wrap">
+      <table id="listing">
+        <thead>
+        <tr>
+          <th data-sort="name" class="sortable">이름</th>
+          <th data-sort="size" class="sortable num">크기</th>
+          <th data-sort="lastModified" class="sortable date">수정 시각</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="empty" class="empty" hidden></div>
+    </div>
+    <div class="footer">
+      <span id="summary" class="muted"></span>
+      <button id="more" hidden>더 보기</button>
+      <button id="all" hidden>모두 불러오기</button>
+    </div>
+  </main>
+
+  <section id="detail" hidden>
+    <div class="detail-head">
+      <h2 id="detailName"></h2>
+      <button id="closeDetail" class="icon-btn" title="닫기" aria-label="닫기">✕</button>
+    </div>
+    <div class="detail-actions">
+      <a id="downloadBtn" class="button primary" href="#">다운로드</a>
+      <a id="openBtn" class="button" href="#" target="_blank" rel="noopener">새 탭에서 열기</a>
+      <button id="copyKey">키 복사</button>
+      <button id="copyUri">S3 URI 복사</button>
+    </div>
+    <dl id="detailMeta"></dl>
+    <div id="preview"></div>
+  </section>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+# S3 Viewer 설정 예시. s3-viewer.properties 로 복사해서 사용하거나 -Dconfig=경로 로 지정.
+# 같은 키를 환경 변수(S3_ENDPOINT, S3_ACCESS_KEY ...)나 -D 옵션으로도 줄 수 있다.
+# 우선순위: -D 시스템 프로퍼티 > 환경 변수 > 이 파일
+
+# --- S3 ---
+s3.endpoint=https://s3.example.com
+s3.region=us-east-1
+s3.accessKey=
+s3.secretKey=
+# 임시 자격 증명(STS)일 때만
+#s3.sessionToken=
+# true: https://endpoint/bucket/key  false: https://bucket.endpoint/key
+s3.pathStyle=true
+# 사설 인증서를 쓰는 엔드포인트에서 TLS 검증을 끔 (가급적 truststore 에 인증서를 추가할 것)
+s3.insecure=false
+# 지정하면 이 버킷들만 보여주고 접근을 허용한다 (ListBuckets 권한이 없을 때도 사용). 쉼표 구분
+#s3.buckets=bucket-a,bucket-b
+#s3.connectTimeoutMs=10000
+#s3.readTimeoutMs=60000
+
+# --- 웹 서버 ---
+server.bind=0.0.0.0
+server.port=8080
+#server.threads=32
+
+# --- 뷰어 접속 인증 (HTTP Basic). 둘 다 지정하면 활성화 ---
+#viewer.user=admin
+#viewer.password=change-me

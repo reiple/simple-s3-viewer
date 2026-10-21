@@ -1,0 +1,50 @@
+# 통합 테스트 환경: S3 호환 서버 2종 + 뷰어 2개
+#   docker compose -f docker/compose.yml up -d --build
+#   docker/seed.sh && docker/test.sh
+#   http://localhost:18080 (SeaweedFS), http://localhost:18081 (RustFS, basic auth admin/admin),
+#   http://localhost:18082 (SeaweedFS, 버킷 허용 목록)
+services:
+  seaweedfs:
+    image: chrislusf/seaweedfs
+    command: server -dir=/data -s3 -s3.port=8333 -s3.config=/etc/s3.json -master.volumeSizeLimitMB=64
+    volumes:
+      - ./seaweed-s3.json:/etc/s3.json:ro
+    ports: ["18333:8333"]
+
+  rustfs:
+    image: rustfs/rustfs
+    environment:
+      RUSTFS_ACCESS_KEY: rustkey
+      RUSTFS_SECRET_KEY: rustsecret
+    command: /data
+    ports: ["19000:9000"]
+
+  viewer-seaweed:
+    build: ..
+    environment:
+      S3_ENDPOINT: http://seaweedfs:8333
+      S3_ACCESS_KEY: testkey
+      S3_SECRET_KEY: testsecret+/key
+    ports: ["18080:8080"]
+    depends_on: [seaweedfs]
+
+  viewer-allowlist:
+    build: ..
+    environment:
+      S3_ENDPOINT: http://seaweedfs:8333
+      S3_ACCESS_KEY: testkey
+      S3_SECRET_KEY: testsecret+/key
+      S3_BUCKETS: test-bucket
+    ports: ["18082:8080"]
+    depends_on: [seaweedfs]
+
+  viewer-rustfs:
+    build: ..
+    environment:
+      S3_ENDPOINT: http://rustfs:9000
+      S3_ACCESS_KEY: rustkey
+      S3_SECRET_KEY: rustsecret
+      VIEWER_USER: admin
+      VIEWER_PASSWORD: admin
+    ports: ["18081:8080"]
+    depends_on: [rustfs]
